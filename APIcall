@@ -1,0 +1,30 @@
+import requests  # For API requests
+
+# API key
+api_file = open("gmaps-api-key.txt", "r")
+api_key = api_file.readline()
+api_file.close()
+
+# home address input
+input = input("What kind of store are you looking for?\n")
+
+opennow = 'true'
+
+r = requests.get("https://maps.googleapis.com/maps/api/place/nearbysearch/json?" +
+                    "location=41.87933, -87.63551" +
+                    "&radius= 1000"+
+                    "&keyword="+input+
+                    "&fields=formatted_address%2Cname%2Crating%2Copening_hours%2Cgeometry" +
+                    "&inputtype=textquery&key=" + api_key
+                 )
+# Review Response and JSON
+#   https://jsonformatter.curiousconcept.com/#
+print(r)
+print(r.json())
+
+# Collect the first two results
+nearbysearch = r.json()['results'][0]['name']
+nearbysearch2 = r.json()['results'][1]['name']
+
+# And print a response
+print("\nThe nearest", input, "are", nearbysearch, "and", nearbysearch2)
